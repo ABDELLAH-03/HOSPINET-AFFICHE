@@ -205,18 +205,107 @@
             font-weight: 500;
         }
 
-        @media (max-width: 576px) {
-            .header-hospital {
-                flex-direction: column;
-                align-items: start;
-                gap: 1rem;
-            }
+        /* ================= RESPONSIVE PATCH — NE CHANGE RIEN AU DESIGN ================= */
 
-            .objectif-principal-block {
-                font-size: 1.2rem;
-                padding: 1.5rem;
-            }
-        }
+/* Empêche les débordements horizontaux */
+html, body {
+    overflow-x: hidden;
+}
+
+/* Ajustements généraux */
+.affiche-card {
+    width: 100%;
+}
+
+/* Header empilé sur tablette/mobile */
+@media (max-width: 992px) {
+    .header-hospital {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 1rem;
+    }
+
+    .badge-version {
+        align-self: flex-start;
+    }
+}
+
+/* Tablettes */
+@media (max-width: 768px) {
+
+    .display-3 {
+        font-size: 2rem;
+    }
+
+    .p-4, .p-xl-5 {
+        padding: 1.5rem !important;
+    }
+
+    .objectif-principal-block {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+
+    .footer-invest {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+
+    .qr-fake {
+        margin-top: 10px;
+    }
+}
+
+/* Smartphones */
+@media (max-width: 576px) {
+
+    body {
+        padding: 1rem 0.5rem;
+    }
+
+    .display-3 {
+        font-size: 1.7rem;
+    }
+
+    h2 { font-size: 1.3rem; }
+    h3 { font-size: 1.2rem; }
+    h4 { font-size: 1.1rem; }
+
+    .badge-fiche,
+    .carac-badge {
+        font-size: 0.85rem;
+        padding: 0.4rem 0.9rem;
+    }
+
+    .pill-objectif {
+        padding: 0.8rem 1rem;
+    }
+
+    .cons-equence {
+        font-size: 0.9rem;
+    }
+}
+
+/* Très petits écrans */
+@media (max-width: 420px) {
+
+    .display-3 {
+        font-size: 1.4rem;
+    }
+
+    .qr-fake {
+        width: 70px;
+        height: 70px;
+    }
+
+    .badge-version {
+        font-size: 0.9rem;
+        padding: 0.4rem 1rem;
+    }
+}
+
     </style>
 </head>
 
