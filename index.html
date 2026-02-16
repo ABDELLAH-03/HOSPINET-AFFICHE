@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOSPINET – Affiche financeurs (Blanc / Vert clair / Bleu)</title>
+    <!-- Bootstrap 5 + Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Palette exclusive : blanc, vert clair, bleu */
+        :root {
+            --blanc-pur: #ffffff;
+            --vert-clair: #d4edda;
+            /* vert clair/bootstrap success light */
+            --vert-moyen: #a3d9a5;
+            /* vert un peu plus soutenu mais doux */
+            --bleu-professionnel: #2c7da0;
+            /* bleu médical apaisant */
+            --bleu-fonce: #1e5775;
+            /* bleu plus profond pour contrastes */
+            --gris-extra-light: #f8fbfe;
+        }
+
+        body {
+            background: linear-gradient(145deg, #d0e6f0 0%, #b8d9e9 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+            font-family: 'Segoe UI', 'Inter', system-ui, sans-serif;
+        }
+
+        .affiche-card {
+            max-width: 1150px;
+            width: 100%;
+            border: none;
+            border-radius: 3rem 3rem 2.5rem 2.5rem;
+            box-shadow: 0 40px 60px rgba(28, 67, 96, 0.25);
+            overflow: hidden;
+            background-color: var(--blanc-pur);
+        }
+
+        /* HEADER : bleu professionnel */
+        .header-hospital {
+            background: var(--bleu-professionnel);
+            border-bottom: 6px solid var(--vert-clair);
+            padding: 1.5rem 2.2rem;
+        }
+
+        .badge-version {
+            background: var(--vert-clair);
+            color: var(--bleu-fonce);
+            font-weight: 700;
+            font-size: 1.2rem;
+            padding: 0.6rem 1.6rem;
+            border-radius: 40px;
+            box-shadow: 0 6px 0 #78a17e;
+            border: 2px solid white;
+        }
+
+        .sous-titre-light {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 40px;
+            padding: 0.3rem 1.2rem;
+            display: inline-block;
+            font-size: 1rem;
+            color: white;
+        }
+
+        /* badges fiche identité : fond vert clair */
+        .badge-fiche {
+            background: var(--vert-clair);
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 500;
+            color: var(--bleu-fonce);
+            border: 1px solid var(--vert-moyen);
+        }
+
+        .badge-fiche i {
+            color: var(--bleu-professionnel);
+        }
+
+        /* PROBLÈME : fond vert clair, bordure bleue */
+        .probleme-card {
+            background: var(--vert-clair);
+            border-left: 0.8rem solid var(--bleu-professionnel);
+            border-radius: 1.5rem;
+        }
+
+        .probleme-card h2 {
+            color: var(--bleu-fonce);
+        }
+
+        .probleme-card i {
+            color: var(--bleu-professionnel);
+        }
+
+        .cons-equence {
+            background: var(--vert-moyen);
+            border-radius: 1rem;
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+            color: var(--bleu-fonce);
+        }
+
+        /* SOLUTION CARD : fond blanc cassé, bordures vertes */
+        .solution-card {
+            background: var(--gris-extra-light);
+            border: 3px solid var(--vert-moyen);
+            border-radius: 2.5rem;
+            box-shadow: 0 12px 0 #b0cfb3;
+        }
+
+        .desc-plateforme {
+            background: white;
+            border-radius: 40px;
+            padding: 0.8rem 1.5rem;
+            border: 2px solid var(--vert-moyen);
+        }
+
+        .carac-badge {
+            background: white;
+            border-radius: 40px;
+            padding: 0.6rem 1.4rem;
+            font-weight: 600;
+            color: var(--bleu-fonce);
+            border: 2px solid var(--bleu-professionnel);
+            box-shadow: 0 4px 0 #9fc1cf;
+        }
+
+        .pill-objectif {
+            background: white;
+            border-left: 0.8rem solid var(--vert-moyen);
+            border-radius: 2rem;
+            padding: 1rem 1.5rem;
+            box-shadow: 0 4px 8px rgba(44, 125, 160, 0.1);
+            font-weight: 600;
+            color: var(--bleu-fonce);
+        }
+
+        /* ACTEURS & FONCTIONS */
+        .acteurs-card,
+        .fonctions-card {
+            background: var(--gris-extra-light);
+            border: 2px solid var(--vert-moyen);
+            border-radius: 2rem;
+            height: 100%;
+        }
+
+        .acteurs-card h4,
+        .fonctions-card h4 {
+            color: var(--bleu-professionnel);
+            border-bottom: 3px solid var(--vert-clair);
+            padding-bottom: 0.8rem;
+        }
+
+        .acteurs-card li i,
+        .fonctions-card li i {
+            color: var(--bleu-professionnel);
+        }
+
+        /* bandeau objectif principal */
+        .objectif-principal-block {
+            background: var(--bleu-professionnel);
+            color: white;
+            border-radius: 3.5rem 3.5rem 0 0;
+            padding: 2rem 2.8rem;
+            font-size: 1.4rem;
+        }
+
+        .qr-fake {
+            width: 85px;
+            height: 85px;
+            background: repeating-linear-gradient(45deg, var(--bleu-fonce) 0px, var(--bleu-fonce) 7px, var(--vert-clair) 7px, var(--vert-clair) 14px);
+            border-radius: 20px;
+            border: 3px solid var(--bleu-professionnel);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+        }
+
+        .footer-invest {
+            background: white;
+            border-top: 6px solid var(--vert-clair);
+            padding: 1.5rem 2.2rem;
+            color: var(--bleu-fonce);
+        }
+
+        .footer-invest i {
+            color: var(--bleu-professionnel);
+        }
+
+        .bas-page {
+            background: var(--vert-clair);
+            color: var(--bleu-fonce);
+            text-align: center;
+            padding: 0.9rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        @media (max-width: 576px) {
+            .header-hospital {
+                flex-direction: column;
+                align-items: start;
+                gap: 1rem;
+            }
+
+            .objectif-principal-block {
+                font-size: 1.2rem;
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="affiche-card card">
+        <!-- HEADER bleu + vert clair -->
+        <div class="header-hospital d-flex flex-wrap align-items-center justify-content-between">
+            <div>
+                <h1 class="display-3 text-white fw-bold mb-0" style="letter-spacing: -1px;">HOSPINET</h1>
+                <div class="sous-titre-light mt-2">
+                    <i class="fas fa-link me-2"></i>Plateforme de recrutement & mise en relation hospitalière
+                </div>
+            </div>
+            <div class="badge-version">
+                <i class="fas fa-rocket me-2"></i>v1.0 · 16 fév 2026
+            </div>
+        </div>
+
+        <!-- mini fiches identité (tags vert clair / bleu) -->
+        <div class="bg-white px-4 py-3 border-bottom d-flex flex-wrap gap-2">
+            <span class="badge-fiche"><i class="fas fa-cube me-1"></i>SaaS multi-établissements</span>
+            <span class="badge-fiche"><i class="fas fa-dna me-1"></i>mutualisation des talents</span>
+            <span class="badge-fiche"><i class="fas fa-robot me-1"></i>matching intelligent</span>
+            <span class="badge-fiche"><i class="fas fa-shield-alt me-1"></i>sécurité RBAC</span>
+        </div>
+
+        <!-- CONTENU PRINCIPAL -->
+        <div class="p-4 p-xl-5">
+            <!-- PROBLÈME (fond vert clair, icônes bleues) -->
+            <div class="probleme-card p-4 mb-5">
+                <h2 class="fw-bold mb-3"><i class="fas fa-exclamation-triangle me-3"></i>Problématique · recrutement
+                    hospitalier</h2>
+                <div class="row g-4">
+                    <div class="col-md-6 col-lg-3 d-flex align-items-center">
+                        <i class="fas fa-hospital me-3 fs-2"></i>
+                        <span class="fw-semibold">Recrutement isolé par établissement</span>
+                    </div>
+                    <div class="col-md-6 col-lg-3 d-flex align-items-center">
+                        <i class="fas fa-search me-3 fs-2"></i>
+                        <span class="fw-semibold">Difficulté à trouver profils qualifiés rapidement</span>
+                    </div>
+                    <div class="col-md-6 col-lg-3 d-flex align-items-center">
+                        <i class="fas fa-redo-alt me-3 fs-2"></i>
+                        <span class="fw-semibold">Processus répétitifs pour les candidats</span>
+                    </div>
+                    <div class="col-md-6 col-lg-3 d-flex align-items-center">
+                        <i class="fas fa-chart-bar me-3 fs-2"></i>
+                        <span class="fw-semibold">Manque de visibilité globale des besoins</span>
+                    </div>
+                </div>
+                <div class="cons-equence mt-4">
+                    <i class="fas fa-skull-crosswalk me-2"></i> Conséquences : postes vacants, coûts d’intérim élevés,
+                    surcharge administrative.
+                </div>
+            </div>
+
+            <!-- SOLUTION + DESCRIPTION (blanc/vert/bleu) -->
+            <div class="solution-card p-4 p-xl-5 mb-5">
+                <h3 class="fw-bold" style="color: var(--bleu-fonce);"><i class="fas fa-lightbulb me-3"
+                        style="color: var(--bleu-professionnel);"></i>Solution HOSPINET – plateforme centralisée</h3>
+                <div class="desc-plateforme my-4">
+                    <span class="fw-bold me-2" style="color: var(--bleu-fonce);">Description :</span> plateforme web
+                    SaaS multi-établissements qui centralise, automatise et optimise le recrutement hospitalier. Elle
+                    connecte directement établissements et professionnels qualifiés.
+                </div>
+
+                <!-- 4 piliers solution : carac-badge -->
+                <div class="d-flex flex-wrap gap-3 my-4">
+                    <span class="carac-badge"><i class="fas fa-users me-2"></i>mutualise les talents</span>
+                    <span class="carac-badge"><i class="fas fa-bolt me-2"></i>recrutement rapide</span>
+                    <span class="carac-badge"><i class="fas fa-tasks me-2"></i>workflows RH automatisés</span>
+                    <span class="carac-badge"><i class="fas fa-chart-pie me-2"></i>statistiques de marché</span>
+                </div>
+
+                <!-- OBJECTIFS SPÉCIFIQUES -->
+                <h4 class="fw-bold mt-4 mb-3" style="color: var(--bleu-fonce);"><i class="fas fa-bullseye me-2"
+                        style="color: var(--bleu-professionnel);"></i> Objectifs spécifiques</h4>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="pill-objectif d-flex align-items-center">
+                            <i class="fas fa-database fs-2 me-3" style="color: var(--bleu-professionnel);"></i> Base de
+                            données unique de talents
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="pill-objectif d-flex align-items-center">
+                            <i class="fas fa-id-card fs-2 me-3" style="color: var(--bleu-professionnel);"></i> Profil
+                            candidat unique (simplification)
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="pill-objectif d-flex align-items-center">
+                            <i class="fas fa-sliders-h fs-2 me-3" style="color: var(--bleu-professionnel);"></i>
+                            Workflows internes personnalisables
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="pill-objectif d-flex align-items-center">
+                            <i class="fas fa-chart-line fs-2 me-3" style="color: var(--bleu-professionnel);"></i>
+                            Analyse des tendances de recrutement
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ACTEURS + FONCTIONNALITÉS CLÉS -->
+            <div class="row g-4 mb-5">
+                <div class="col-lg-6">
+                    <div class="acteurs-card p-4 h-100">
+                        <h4 class="fw-bold"><i class="fas fa-theater-masks me-2"></i>Acteurs</h4>
+                        <ul class="list-unstyled mt-3">
+                            <li class="mb-4 d-flex"><i class="fas fa-user-md fs-2 me-3"></i>
+                                <div><strong>Candidat</strong> — profil unique, postulation 1 clic, suivi</div>
+                            </li>
+                            <li class="mb-4 d-flex"><i class="fas fa-hospital fs-2 me-3"></i>
+                                <div><strong>Établissement</strong> — publier offres, accès vivier global, gestion</div>
+                            </li>
+                            <li class="mb-4 d-flex"><i class="fas fa-user-cog fs-2 me-3"></i>
+                                <div><strong>Administrateur</strong> — valider établissements, supervision, support
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="fonctions-card p-4 h-100">
+                        <h4 class="fw-bold"><i class="fas fa-key me-2"></i>Fonctionnalités clés</h4>
+                        <ul class="list-unstyled mt-3 row row-cols-1 row-cols-sm-2">
+                            <li class="mb-3 col d-flex"><i class="fas fa-brain me-3 fs-3"></i> Matching intelligent</li>
+                            <li class="mb-3 col d-flex"><i class="fas fa-globe me-3 fs-3"></i> Base de talents globale
+                            </li>
+                            <li class="mb-3 col d-flex"><i class="fas fa-chart-simple me-3 fs-3"></i> Tableau de bord
+                                analytique</li>
+                            <li class="mb-3 col d-flex"><i class="fas fa-gears me-3 fs-3"></i> Workflow RH intégré</li>
+                            <li class="mb-3 col d-flex"><i class="fas fa-building me-3 fs-3"></i> Gestion
+                                multi-établissements</li>
+                            <li class="mb-3 col d-flex"><i class="fas fa-lock me-3 fs-3"></i> Sécurité RBAC</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- OBJECTIF PRINCIPAL (bleu avec touches vert clair) -->
+        <div class="objectif-principal-block d-flex align-items-center">
+            <i class="fas fa-arrow-right fa-2x me-4" style="color: var(--vert-clair);"></i>
+            <span><strong>Objectif principal :</strong> créer un écosystème digital fluide reliant hôpitaux et
+                professionnels dans un environnement sécurisé, centralisé et intelligent.</span>
+        </div>
+
+        <!-- FOOTER CONTACT -->
+        <div class="footer-invest d-flex flex-wrap align-items-center justify-content-between">
+            <div class="d-flex flex-wrap gap-4">
+                <span><i class="fas fa-envelope me-2"></i> contact@hospinet.io</span>
+                <span><i class="fas fa-phone-alt me-2"></i> +33 1 87 45 23 10</span>
+                <span><i class="fas fa-user-tie me-2"></i> Dr A. Roussel, fondateur</span>
+            </div>
+            <div class="qr-fake">
+                <span class="bg-white text-dark px-2 py-1 rounded small fw-bold">FICHE</span>
+            </div>
+        </div>
+
+        <!-- bas de page vert clair -->
+        <div class="bas-page">
+            HOSPINET – Plateforme de recrutement et de mise en relation hospitalière · v1.0 · 16 février 2026
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
